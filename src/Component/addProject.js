@@ -17,7 +17,6 @@ export default class AddProject extends Component {
             underlineColorAndroid="transparent"
             onChangeText= { text => this.setState({ nameProject: text })}
           />
-          <Text>{this.state.nameProject}</Text>
           <Button 
             title="save" 
             onPress={ () => {

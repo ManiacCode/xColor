@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import AddProject from './src/Component/addProject'
 import ShowProject from './src/Component/showProject';
 
@@ -17,17 +17,37 @@ export default class App extends React.Component {
     let {dataset} = this.state;
     if (nameProject !== null){
       dataset.push({name:nameProject});
+      this._storageData(dataset);
     }
-    this.setState({showProjectNameInputScreen: false, dataset:dataset})
+    this.setState({index: dataset.length - 1, showProjectNameInputScreen: false, dataset:dataset})
+  }
+
+  _displayNextProject() {
+    let { index, dataset } = this.state;
+    let nextIndex = index + 1;
+    if (nextIndex === dataset.length) nextIndex = 0;
+    this.setState({ index : nextIndex});
+  }
+
+  _storageData(dataset) {
+    AsyncStorage.setItem('DATA', JSON.stringify(dataset));
+  }
+
+  _retrieveData = async () => {
+    let value = AsyncStorage.getItem('DATA');
+    if (value !== null) {
+      JSON.parse(value);
+      this.setState({ dataset : value});
+    }
+  }
+
+  componentDidMount(){
+    this._retrieveData();
   }
 
   render() {
     let {index, dataset} = this.state;
     const data = dataset[index];
-
-    let nextIndex = index + 1;
-
-    if (nextIndex === dataset.length) nextIndex = 0;
 
     return (
       <View style={styles.container}>
@@ -44,7 +64,7 @@ export default class App extends React.Component {
           <Button 
           style={{color: '#fff'}}
           title="next" 
-          onPress={() => this.setState({ index: nextIndex})} />
+          onPress={() => this._displayNextProject()} />
         </View>
       </View>
     );
