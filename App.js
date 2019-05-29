@@ -2,16 +2,10 @@ import React from 'react';
 import { Button, StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import AddProject from './src/Component/addProject'
 import ShowProject from './src/Component/showProject';
-
-
-const data = [
-  {
-    name: '',
-  }
-];
+import { Icon } from 'react-native-elements';
 
 export default class App extends React.Component {
-  state = { index: 0, showProjectNameInputScreen: false, dataset:data};
+  state = { index: 0, showProjectNameInputScreen: false, dataset: []};
   
   _addName = (nameProject) => {
     let {dataset} = this.state;
@@ -48,23 +42,42 @@ export default class App extends React.Component {
   render() {
     let {index, dataset} = this.state;
     const data = dataset[index];
+    let content = null;
+
+    if (data){
+      content = <ShowProject name={data.name} />;
+    } else {
+      content = <Text>keine Einträge</Text>
+    }
 
     return (
       <View style={styles.container}>
-        <Button title="add Project" onPress={ () => this.setState({showProjectNameInputScreen: true})} />
+
+        
 
         <AddProject 
           visible={this.state.showProjectNameInputScreen}
           onSave={this._addName}
         />
 
-        <ShowProject name={data.name} />
+        <View style={styles.content}>
+          {content}
+        </View>
+        
 
         <View style={styles.nextButton}>  
           <Button 
           style={{color: '#fff'}}
           title="next" 
           onPress={() => this._displayNextProject()} />
+        </View>
+
+        <View style={styles.addProject}>
+          <Icon
+            name="add-circle"
+            size="64"
+            onPress={ () => this.setState({showProjectNameInputScreen: true})}
+          />
         </View>
       </View>
     );
@@ -78,4 +91,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  addProject: {
+    position: 'absolute',
+    bottom: 50,
+  },
+  content: {
+    position: 'absolute',
+    top: 150,
+  }
 });

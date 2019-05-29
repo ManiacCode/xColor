@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Button, StyleSheet, View, TextInput, Modal, Text } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class AddProject extends Component {
   state = { nameProject: null }
@@ -17,17 +19,42 @@ export default class AddProject extends Component {
             underlineColorAndroid="transparent"
             onChangeText= { text => this.setState({ nameProject: text })}
           />
-          <Button 
-            title="save" 
-            onPress={ () => {
-              this.setState({name:null});
-              this.props.onSave(this.state.nameProject);
-            }}
-          />
+
+          <View style={styles.save}>
+            <Icon
+              name="save"
+              size="64"
+              onPress={ () => {
+                this.setState({name:null});
+                this.props.onSave(this.state.nameProject);
+              }}
+            />
+          </View>
+
+          <View style={styles.close}>
+            <Icon
+              name="times_circle"
+              size="64"
+              onPress={ () => {
+                this.setState({name:null});
+                this.props.onSave(this.state.nameProject);
+              }}
+            />
+          </View>
+
+          <View style={styles.close}>
+            <Ionicons
+              name="close_circle"
+              size="64"
+              onPress={ () => {
+                this.setState({name:null});
+                this.props.onSave(this.state.nameProject);
+              }}
+            />
+          </View>
+
         </View>
       </Modal>
-
-      
     ); 
   }
 }
